@@ -24,7 +24,8 @@
       throw new HttpResponseException(response()->json(
         [
             "success"=>false,
-            "error"=>$responseMessage
+            "error"=>$responseMessage,
+            "message"=>$responseMessage
     ], 422));
     }
 
@@ -33,6 +34,7 @@
       throw new HttpResponseException(response()->json(
         [
             "success"=>false,
+            "error"=>$responseMessage,
             "message"=>$responseMessage
     ], 500));
     }
@@ -42,7 +44,8 @@
         throw new HttpResponseException(response()->json(
             [
                 "success"=>false,
-                "message"=>'unauthenticated'
+                "message"=>'unauthenticated',
+                "error"=>"unauthenticated"
         ], 401));
     }
 

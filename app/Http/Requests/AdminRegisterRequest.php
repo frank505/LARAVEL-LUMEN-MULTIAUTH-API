@@ -29,7 +29,7 @@ class AdminRegisterRequest extends FormRequest
         return [
             "name"=>"required",
             "email"=>"required|email|unique:admin",
-            "password"=>"required",
+            "password"=>"required|min:8",
         ];
     }
     /**
@@ -45,7 +45,8 @@ class AdminRegisterRequest extends FormRequest
             'email.required' => 'email field is required',
             'email.email' => 'please enter a valid email',
             'email.unique:admin'=>'this user exists already',
-            'password'=>'required'
+            'password'=>'required',
+            'password.min'=>'password must be eight characters and above',
         ];
     }
     

@@ -8,7 +8,7 @@ use App\Http\Requests\AdminRegisterRequest;
 use App\Admin;
 use App\Http\Requests\AdminLoginRequest;
 use App\Http\Services\UtilityService;
-use Tymon\JWTAuth\JWTAuth;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
 class AdminController extends Controller
 {
@@ -32,7 +32,8 @@ class AdminController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         if (! $token = Auth::guard('admin')->attempt($credentials)) {
-           return $this->utilityService->is401Response();
+           $responseMessage = "invalid username or password";
+           return $this->utilityService->is422Response($responseMessage);
         }
 
         return $this->respondWithToken($token);
@@ -49,9 +50,63 @@ class AdminController extends Controller
 
     public function viewProfile()
     {
-        return response()->json(['admin' => Auth::guard('admin')->user()], 200);
+        return response()->json([
+            'success'=>true,
+            'admin' => Auth::guard('admin')->user()
+            ]
+            , 200);
+       
     }
 
+     /**
+     * Log the application out (Invalidate the token).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout()
+    {
+        try {
+           
+             $this->logAdminOut();
+
+        } catch (TokenExpiredException $e) {
+            
+            $responseMessage = "token has already been invalidated";
+            $this->tokenExpirationException($responseMessage);
+        } 
+    }
+
+    
+    public function logAdminOut()
+    {
+        Auth::guard('admin')->logout();
+        $responseMessage = "successfully logged out";
+      return  $this->utilityService->is200Response($responseMessage);
+    }
+
+
+    public function tokenExpirationException($responseMessage)
+    {
+        return $this->utilityService->is422Response($responseMessage);
+    }
+
+    /**
+     * Refresh a token.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refreshToken()
+    {
+        try
+         {
+            return $this->respondWithToken(Auth::guard('admin')->refresh());
+        }
+         catch (TokenExpiredException $e)
+         {
+            $responseMessage = "Token has expired and can no longer be refreshed";
+            return $this->tokenExpirationException($responseMessage);
+        } 
+    }
 
 
 }

@@ -21,6 +21,8 @@ $router->group(['prefix' => 'user'], function () use ($router) {
    $router->post('register', 'UserController@register');
     $router->post('login', 'UserController@login');
     $router->get('view-profile','UserController@viewProfile');
+    $router->get('logout','UserController@logout');
+    $router->post('refresh-token','UserController@refreshToken');
 });
 
 
@@ -32,4 +34,6 @@ $router->group(['prefix' => 'admin'], function () use ($router) {
    $router->post('register', 'AdminController@register');
     $router->post('login', 'AdminController@login');
     $router->get('view-profile','AdminController@viewProfile');
+    $router->get('logout','AdminController@logout');
+    $router->post('refresh-token','AdminController@refreshToken');
 });

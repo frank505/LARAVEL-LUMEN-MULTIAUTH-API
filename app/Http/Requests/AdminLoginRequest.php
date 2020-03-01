@@ -42,7 +42,7 @@ class AdminLoginRequest extends FormRequest
         return [
             'email.required' => 'email field is required',
             'email.email' => 'please enter a valid email',
-            'password'=>'required'
+            'password.required'=>'password field is required'
         ];
     }
     
