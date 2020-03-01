@@ -24,7 +24,7 @@
       throw new HttpResponseException(response()->json(
         [
             "success"=>false,
-            "message"=>$responseMessage
+            "error"=>$responseMessage
     ], 422));
     }
 

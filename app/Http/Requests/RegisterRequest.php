@@ -29,7 +29,7 @@ class RegisterRequest extends FormRequest
         return [
             "name"=>"required",
             "email"=>"required|email|unique:user",
-            "password"=>"required",
+            "password"=>"required|min:8",
         ];
     }
     /**
@@ -45,6 +45,7 @@ class RegisterRequest extends FormRequest
             'email.required' => 'email field is required',
             'email.email' => 'please enter a valid email',
             'email.unique:users'=>'this user exists already',
+            'password.min:8'=>'password must be eight characters and above',
             'password'=>'required'
         ];
     }

@@ -45,8 +45,10 @@ class UserController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         if (! $token = Auth::guard('user')->attempt($credentials)) {
-            return $this->utilityService->is401Response();
+            $responseMessage = "invalid username or password";
+            return $this->utilityService->is422Response($responseMessage);
          }
+         
 
         return $this->respondWithToken($token);
     }
@@ -54,7 +56,11 @@ class UserController extends Controller
 
     public function viewProfile()
     {
-        return response()->json(['user' => Auth::guard('user')->user()], 200);
+        return response()->json([
+            'success'=>true,
+            'user' => [Auth::guard('user')->user()]
+            ]
+            , 200);
     }
 
     
